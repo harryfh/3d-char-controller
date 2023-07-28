@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://bwgaauobrtl8a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vq8iy"]
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_5dw6f"]
+offsets = PackedFloat32Array(0, 0.23913, 0.690217, 1)
+colors = PackedColorArray(1, 0, 0.0196078, 1, 0.63609, 0.204917, 0, 1, 0.490196, 0.0196078, 0, 0.737255, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wud4t"]
+gradient = SubResource("Gradient_5dw6f")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ysb3d"]
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+color_ramp = SubResource("GradientTexture1D_wud4t")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vn2wb"]
+size = Vector2(0.3, 0.3)
+
+[node name="DamageParticles" type="Node3D"]
+
+[node name="startTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_vq8iy")
+emitting = false
+one_shot = true
+explosiveness = 0.83
+process_material = SubResource("ParticleProcessMaterial_ysb3d")
+draw_pass_1 = SubResource("QuadMesh_vn2wb")
+
+[connection signal="timeout" from="startTimer" to="GPUParticles3D" method="set_emitting" binds= [true]]

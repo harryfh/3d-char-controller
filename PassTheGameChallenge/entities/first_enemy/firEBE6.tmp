@@ -1,11 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://d1so20hiwh55"]
+[gd_scene load_steps=19 format=3 uid="uid://c6w8k45in4ge0"]
 
 [ext_resource type="Script" path="res://entities/first_enemy/first_enemy.gd" id="1_46831"]
 [ext_resource type="PackedScene" uid="uid://cjbkrjimolek1" path="res://components/health_component/health_component.tscn" id="1_x2cu5"]
-[ext_resource type="Script" path="res://entities/first_enemy/new_state_machine.gd" id="2_fiifc"]
 [ext_resource type="PackedScene" uid="uid://djrtlc6lid7uu" path="res://components/health_bar/health_bar_3d.tscn" id="2_nix74"]
 [ext_resource type="PackedScene" uid="uid://nfvoks38cm7x" path="res://components/dev_info_tag/dev_info_tag_3d.tscn" id="4_ldtt0"]
 [ext_resource type="PackedScene" uid="uid://uf0404yj5601" path="res://components/weapons/sword.tscn" id="6_o4ric"]
+[ext_resource type="Script" path="res://entities/first_enemy/better_state_machine.gd" id="9_qvf1s"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_yaxin"]
 
@@ -14,14 +14,11 @@ albedo_color = Color(0.164706, 0.619608, 0.552941, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nap2m"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_i07xo"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_66k5d"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_4sstd"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_xrutw"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_bh7fv"]
-radius = 10.0
 
 [sub_resource type="Animation" id="Animation_u5i68"]
 resource_name = "BlockedAnim"
@@ -114,34 +111,6 @@ tracks/4/keys = {
 "values": [Vector3(-0.179177, -3.01413, -1.10773)]
 }
 
-[sub_resource type="Animation" id="Animation_mdgfx"]
-resource_name = "idle"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sword:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-0.611325, -0.155624, -2.15976)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sword:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0.360148, 1.2722, -0.307108)]
-}
-
 [sub_resource type="Animation" id="Animation_xo0jk"]
 resource_name = "sword_slash_horizontal"
 tracks/0/type = "value"
@@ -193,6 +162,34 @@ tracks/3/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_mdgfx"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.611325, -0.155624, -2.15976)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.360148, 1.2722, -0.307108)]
+}
+
 [sub_resource type="Animation" id="Animation_bhgdd"]
 resource_name = "sword_slash_horizontal_right"
 tracks/0/type = "value"
@@ -241,8 +238,10 @@ _data = {
 "sword_slash_horizontal_right": SubResource("Animation_bhgdd")
 }
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_bh7fv"]
+radius = 10.0
+
 [node name="FirstEnemy" type="CharacterBody3D"]
-platform_on_leave = 1
 script = ExtResource("1_46831")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -257,32 +256,27 @@ shape = SubResource("CapsuleShape3D_nap2m")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("2_fiifc")
+script = ExtResource("9_qvf1s")
+swing_sword_range = null
+swing_sword_cooldown_min = null
+swing_sword_cooldown_max = null
 
 [node name="HealthComponent" parent="." instance=ExtResource("1_x2cu5")]
 
 [node name="HealthBar3D" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("2_nix74")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-texture = SubResource("ViewportTexture_i07xo")
+texture = SubResource("ViewportTexture_66k5d")
 health_component = NodePath("../HealthComponent")
 
 [node name="DevInfoTag3D" parent="." instance=ExtResource("4_ldtt0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.02465, 0)
-texture = SubResource("ViewportTexture_4sstd")
+texture = SubResource("ViewportTexture_xrutw")
 
 [node name="Sword" parent="." instance=ExtResource("6_o4ric")]
 transform = Transform3D(0.276481, 0.780889, -0.560152, -0.880364, 0.439542, 0.17822, 0.38538, 0.443863, 0.808992, 0.360148, 1.2722, -0.307108)
 
-[node name="DetectionArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, -9.31323e-10, 1.86265e-09, 1, 4.0076e-08, 9.31323e-10, 1.02737e-08, 1, 0, 0, -2.98023e-08)
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
-shape = SubResource("SphereShape3D_bh7fv")
-
 [node name="Sword2" parent="." instance=ExtResource("6_o4ric")]
-transform = Transform3D(-0.463339, -0.877308, -0.125083, -0.880364, 0.439542, 0.17822, -0.101375, 0.192694, -0.976009, -0.391475, 1.2722, -0.307108)
+transform = Transform3D(-0.463338, -0.877309, -0.125081, -0.880364, 0.439542, 0.17822, -0.101375, 0.192693, -0.976009, -0.391475, 1.2722, -0.307108)
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -291,8 +285,10 @@ libraries = {
 "": SubResource("AnimationLibrary_sctve")
 }
 
-[node name="ParticlePoint" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32487, 0)
+[node name="DetectionArea" type="Area3D" parent="."]
 
-[connection signal="blowStopped" from="Sword" to="StateMachine" method="get_blow_stopped"]
-[connection signal="blowStopped" from="Sword2" to="StateMachine" method="get_blow_stopped"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_bh7fv")
+
+[connection signal="blowStopped" from="Sword" to="StateMachine" method="_on_sword_blow_stopped"]
+[connection signal="blowStopped" from="Sword2" to="StateMachine" method="_on_sword_blow_stopped"]

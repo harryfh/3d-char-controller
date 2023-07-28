@@ -16,9 +16,12 @@ var pause_timer: Timer
 var pause_time: float = 0.5
 var pause_time_variance: float = 0.1
 
-var swing_sword_range: float = 3
+
 var swing_sword_cooldown_timer: Timer
-var swing_sword_cooldown_time: float = 0.5
+
+@export var swing_sword_range: float = 3
+@export var swing_sword_cooldown_min: float = 0.1
+@export var swing_sword_cooldown_max: float = 0.5
 
 func _ready():
 	rand_gen = RandomNumberGenerator.new()
@@ -32,7 +35,7 @@ func _ready():
 	
 	swing_sword_cooldown_timer = Timer.new()
 	swing_sword_cooldown_timer.one_shot = true
-	swing_sword_cooldown_timer.wait_time = swing_sword_cooldown_time
+	swing_sword_cooldown_timer.wait_time = get_swing_cooldown()
 	add_child(swing_sword_cooldown_timer)
 	
 	# This state machine controls the node that it is a child of
@@ -44,11 +47,17 @@ func _ready():
 	add_state("move_to_target")
 	add_state("swing_sword")
 	call_deferred("set_state", states.wander)
+	
+
+
+func get_swing_cooldown() -> float:
+	return randf_range(swing_sword_cooldown_min, swing_sword_cooldown_max)
 
 func _state_logic(delta):
 	mob.apply_gravity(delta)
 	
-	if attack_target == null:
+	
+	if !attack_target:
 		find_player_in_detection_area()
 	
 	if state == states.wander:
@@ -82,6 +91,7 @@ func _get_transition(_delta):
 			if swing_sword_cooldown_timer.time_left > 0:
 				return null # Do not transition
 			else:
+				
 				if attack_target != null:
 					return states.move_to_target
 				else:
@@ -116,11 +126,23 @@ func _enter_state(_new_state, _previous_state):
 		states.move_to_target:
 			pass
 		states.swing_sword:
-			anim_player.play("sword_slash_horizontal")
+			var swing_time = 0.25
+			anim_player.play("sword_slash_horizontal",-1,2) # Original was 0.5
+			swing_sword_cooldown_timer.wait_time = swing_time
 			swing_sword_cooldown_timer.start()
-		_:
+
 			pass
 	pass
+
+func _on_sword_blow_stopped():
+	
+	# cancel the swing animation
+	var is_blocked = true
+	anim_player.stop()
+	anim_player.play("BlockedAnim")
+	
+	pass # Replace with function body.
+
 
 func _exit_state(_old_state, _new_state):
 	pass

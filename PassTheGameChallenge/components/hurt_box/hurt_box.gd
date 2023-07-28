@@ -10,15 +10,12 @@ func _ready():
 	body_entered.connect(on_body_entered)
 
 func on_body_entered(body: Node3D):
-	
-	
-	
+
 	# Don't deal damage if still cooling down
 	if cooldown_timer.time_left > 0:
 		return
-	if body.has_node("HealthComponent"):
-		var found_health_component: HealthComponent = body.get_node("HealthComponent")
-		found_health_component.take_damage(damage)
+	if body.has_method("take_damage"):
+		body.take_damage(damage)
 		cooldown_timer.start()
 		
 

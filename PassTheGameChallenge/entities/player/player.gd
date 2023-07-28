@@ -20,12 +20,12 @@ var angular_velocity = 5.0
 		* gravity_multiplier)
 var direction := Vector3()
 var forward: Vector3
-var sensitivity_x: float = 0.5
-var sensitivity_y: float = 0.5
+var sensitivity_x: float = 0.2
+var sensitivity_y: float = 0.2
 
 # Components
 @onready var health_component: HealthComponent = $HealthComponent
-@onready var camera: Camera3D = $CameraPivot/CameraGuide
+@onready var camera: Camera3D = $CameraPivot/SpringArm3D/CameraGuide
 
 #Animation 
 @onready var animator : AnimationPlayer = $AnimationPlayer
@@ -36,11 +36,14 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	health_component.health_died.connect(on_death)
 	move_speed = walk_speed
-
+	$WeaponManager/Shield/Shield_box.hide()
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("escape"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		
+	if Input.is_action_just_pressed("jump"):
+		apply_jump()
 		
 	
 	if Input.is_action_just_pressed("SwordStance") :
@@ -84,13 +87,14 @@ func _physics_process(delta):
 	
 	apply_movement()
 
-# the moving camera was making things hard to read, so I put it static
-#func _input(event):
-#	if event is InputEventMouseMotion:
-#		rotate_y(deg_to_rad(-event.relative.x) * sensitivity_x)
-#		$CameraPivot.rotate_z(deg_to_rad(-event.relative.y) * sensitivity_y)
-#		$CameraPivot.rotation_degrees.x = clampf($CameraPivot.rotation_degrees.x, 0, 85) 
+# changed phyisics/common/physics_ticks_per_second to 144 instead of default 60 since bc of my monitor, it may cause issues IDK
+func _input(event):
+	if event is InputEventMouseMotion:
+		rotate_y(deg_to_rad(-event.relative.x) * sensitivity_x)
+		$CameraPivot.rotate_x(deg_to_rad(-event.relative.y) * sensitivity_y)
+		$CameraPivot.rotation_degrees.x = clampf($CameraPivot.rotation_degrees.x, -30, 15) 
 
+	
 
 func handle_move_input( delta : float ):
 	forward = -camera.global_transform.basis.z.normalized()
@@ -98,14 +102,13 @@ func handle_move_input( delta : float ):
 			&"move_left", &"move_right")
 	
 	# Removed the Y movement as it now serve directly in the rotation of the character
-	direction = -forward * -input_axis.x # + forward.cross(Vector3.UP) * input_axis.y
+	direction = -forward * -input_axis.x  + forward.cross(Vector3.UP) * input_axis.y
 	
 	# turn the character in the direction of the movement
-	if (abs(input_axis.y) > 0) :
+	#if (abs(input_axis.y) > 0) :
 		
-		global_rotation += Vector3(0, - input_axis.y, 0) * delta * 3
+	#	global_rotation += Vector3(0, - input_axis.y, 0) * delta * 3
 		
-	
 
 
 func handle_sprint_input():
@@ -164,3 +167,6 @@ func rotate_towards_motion_no_y(delta: float):
 	var angle := current_direction.signed_angle_to(direction, axis)
 	var angle_step: float = min(angular_velocity * delta, abs(angle)) * sign(angle)
 	rotate(axis, angle_step)
+	
+func take_damage(damage : int):
+	health_component.take_damage(damage)

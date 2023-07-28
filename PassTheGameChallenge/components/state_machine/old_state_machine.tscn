@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://t74wm1lm1cp2"]
+
+[ext_resource type="Script" path="res://components/state_machine/state_machine.gd" id="1_rq7lu"]
+[ext_resource type="Script" path="res://entities/first_enemy/first_enemy_fsm.gd" id="2_m3tto"]
+
+[node name="StateMachine" type="Node"]
+script = ExtResource("1_rq7lu")
+
+[node name="Enemy_FSM" type="Node" parent="."]
+script = ExtResource("2_m3tto")

@@ -1,4 +1,4 @@
-class_name StateMachine
+#class_name StateMachine
 extends Node
 # Guided by https://www.youtube.com/watch?v=j_pM3CiQwts&t=124s
 
