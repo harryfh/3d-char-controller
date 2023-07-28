@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dlv38pr7p7pag"]
+
+[ext_resource type="Script" path="res://components/ShieldBox/Shield_box.gd" id="1_q011l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mauby"]
+size = Vector3(1.33017, 1.36367, 0.29134)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3efy"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.317647, 1, 0.603922, 0.388235)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oj66d"]
+material = SubResource("StandardMaterial3D_e3efy")
+size = Vector3(1.25, 1.25, 0.25)
+
+[node name="Shield_box" type="Area3D"]
+script = ExtResource("1_q011l")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_mauby")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("BoxMesh_oj66d")

@@ -1,0 +1,156 @@
+[gd_scene load_steps=17 format=3 uid="uid://c6w8k45in4ge0"]
+
+[ext_resource type="Script" path="res://entities/first_enemy/first_enemy.gd" id="1_46831"]
+[ext_resource type="PackedScene" uid="uid://cjbkrjimolek1" path="res://components/health_component/health_component.tscn" id="1_x2cu5"]
+[ext_resource type="PackedScene" uid="uid://djrtlc6lid7uu" path="res://components/health_bar/health_bar_3d.tscn" id="2_nix74"]
+[ext_resource type="PackedScene" uid="uid://nfvoks38cm7x" path="res://components/dev_info_tag/dev_info_tag_3d.tscn" id="4_ldtt0"]
+[ext_resource type="Script" path="res://entities/first_enemy/first_enemy_fsm.gd" id="4_pe3ka"]
+[ext_resource type="PackedScene" uid="uid://uf0404yj5601" path="res://components/weapons/sword.tscn" id="6_o4ric"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yaxin"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qn8uq"]
+albedo_color = Color(0.164706, 0.619608, 0.552941, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nap2m"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mlaf7"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wrbyt"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="Animation" id="Animation_gp6bl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.179177, -0.605612, -1.10773)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.360148, 1.2722, -0.307108)]
+}
+
+[sub_resource type="Animation" id="Animation_xo0jk"]
+resource_name = "sword_slash_horizontal"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.611325, -0.155624, -2.15976), Vector3(-0.179177, -0.605612, -1.10773), Vector3(-0.179177, -0.605612, -1.10773), Vector3(0.0318241, 0.60606, -1.41758), Vector3(0.031824, 1.27115, -1.41758), Vector3(0.031824, 2.31603, -1.41758)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.360148, 1.2722, -0.307108), Vector3(0.360148, 1.2722, -0.307108), Vector3(0.360148, 1.2722, -0.307108), Vector3(0.360148, 1.2722, -0.307108), Vector3(-0.00177497, 1.2722, -0.413314), Vector3(-0.266017, 1.2722, -0.245007)]
+}
+
+[sub_resource type="Animation" id="Animation_u5i68"]
+resource_name = "BlockedAnim"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.360148, 1.2722, -0.307108), Vector3(0.413244, 1.87432, 0.227526), Vector3(0.537135, 1.38565, 0.238308)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.179177, -0.605612, -1.10773), Vector3(0.188145, -1.7998, -0.771342), Vector3(0.0986858, -1.13238, -1.35567), Vector3(0.00922674, -1.32269, -1.94)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sctve"]
+_data = {
+"BlockedAnim": SubResource("Animation_u5i68"),
+"RESET": SubResource("Animation_gp6bl"),
+"sword_slash_horizontal": SubResource("Animation_xo0jk")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bh7fv"]
+radius = 10.0
+
+[node name="FirstEnemy" type="CharacterBody3D"]
+script = ExtResource("1_46831")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_yaxin")
+surface_material_override/0 = SubResource("StandardMaterial3D_qn8uq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_nap2m")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="HealthComponent" parent="." instance=ExtResource("1_x2cu5")]
+
+[node name="HealthBar3D" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("2_nix74")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+texture = SubResource("ViewportTexture_mlaf7")
+health_component = NodePath("../HealthComponent")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("4_pe3ka")
+
+[node name="DevInfoTag3D" parent="." instance=ExtResource("4_ldtt0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.02465, 0)
+texture = SubResource("ViewportTexture_wrbyt")
+
+[node name="Sword" parent="." instance=ExtResource("6_o4ric")]
+transform = Transform3D(0.276481, 0.780889, -0.560152, -0.880364, 0.439542, 0.17822, 0.38538, 0.443863, 0.808992, 0.360148, 1.2722, -0.307108)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sctve")
+}
+
+[node name="DetectionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_bh7fv")
+
+[connection signal="blowStopped" from="Sword" to="." method="_on_sword_blow_stopped"]

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgsujjxt71qgj"]
+
+[ext_resource type="Script" path="res://components/hurt_box/hurt_box.gd" id="1_fynop"]
+
+[node name="HurtBox" type="Area3D"]
+script = ExtResource("1_fynop")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

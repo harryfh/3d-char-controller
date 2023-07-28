@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://1q8h4r5s4w2u"]
+
+[ext_resource type="Script" path="res://entities/follow_camera/follow_camera.gd" id="1_ltp7d"]
+
+[node name="FollowCamera" type="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.968783, 0.247912, 0, -0.247912, 0.968783, 0, 1.91463, 0)
+top_level = true
+script = ExtResource("1_ltp7d")

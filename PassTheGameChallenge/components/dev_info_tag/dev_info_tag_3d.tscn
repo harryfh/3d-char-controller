@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://nfvoks38cm7x"]
+
+[ext_resource type="PackedScene" uid="uid://bf7ipeymg7bat" path="res://components/dev_info_tag/dev_info_tag.tscn" id="1_un0yq"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qv65p"]
+viewport_path = NodePath("SubViewport")
+
+[node name="DevInfoTag3D" type="Sprite3D"]
+billboard = 1
+double_sided = false
+texture_filter = 0
+texture = SubResource("ViewportTexture_qv65p")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(300, 100)
+
+[node name="DevInfoTag" parent="SubViewport" instance=ExtResource("1_un0yq")]
